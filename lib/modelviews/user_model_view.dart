@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auth_firebase/models/app_user.dart';
 import 'package:auth_firebase/repository/user_repository.dart';
 import 'package:auth_firebase/utils/get_it.dart';
@@ -83,11 +85,20 @@ class UserModelView extends ChangeNotifier {
     }
   }
 
-  String nameOrSurnameCheck(String nameOrSurname) {
-    if (nameOrSurname.length > 1) {
-      return null;
-    } else {
+  String nameAndSurnameCheck(String nameAndSurname) {
+    if (nameAndSurname.length < 1) {
       return "En az 2 karakter olabilir";
+    } else if (!RegExp(r"^(?=[a-zA-ZğüşiöçĞÜŞİÖÇ ]{3,10}$)")
+        .hasMatch(nameAndSurname)) {
+      return "İsim soyisim  özel karakterler içermemeli";
+    } else if (!nameAndSurname.contains(" ")) {
+      return "İsim ve Soyisminizi boşluk ile ayırın";
+    } else if (nameAndSurname.split(" ")[0].length < 2) {
+      return "İsminiz en az 2 harf olabilir";
+    } else if (nameAndSurname.split(" ")[1].length < 2) {
+      return "Soyisminiz en az 2 harf olabilir";
+    } else {
+      return null;
     }
   }
 
@@ -99,7 +110,7 @@ class UserModelView extends ChangeNotifier {
       userNameValidator = "kullanıcı adı en az 3 karakter olabilir";
     } else if (userName.length > 10) {
       userNameValidator = "kullanıcı adı en fazla 10 karakter olabilir";
-    } else if (!RegExp(r"^(?=[a-zA-Z0-9._]{3,9}$)").hasMatch(userName)) {
+    } else if (!RegExp(r"^(?=[a-zA-Z0-9._]{3,10}$)").hasMatch(userName)) {
       userNameValidator = "kullanıcı adı özel karakterler, boşluk içermemeli";
     } else {
       userNameValidator = null;
@@ -119,6 +130,11 @@ class UserModelView extends ChangeNotifier {
 
   Future<bool> sendPasswordResetEmail(String email) async {
     return await _userRepository.sendPasswordResetEmail(email);
+  }
+
+  Future<String> uploadProfilePhotoToDatabase(File profilePicture) async {
+    return await _userRepository.uploadProfilePhotoToDatabase(
+        appUser.userID, profilePicture);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////

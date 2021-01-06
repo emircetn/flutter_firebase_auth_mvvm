@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 
 class AppUser {
-  String userID, userName, nameAndSurName, profileUrl, location, email;
+  String userID, userName, nameAndSurName, profileUrl, email;
 
-  AppUser.toFirebase({
+  AppUser.toFirebaseUser({
     @required this.userID,
     @required this.email,
+  });
+  AppUser.toFirebaseGoogleUser({
+    @required this.userID,
+    @required this.email,
+    @required this.nameAndSurName,
+    @required this.profileUrl,
   });
 
   AppUser.fromMap(Map<String, dynamic> userMap) {
@@ -14,7 +20,6 @@ class AppUser {
     email = userMap['email'];
     nameAndSurName = userMap['nameAndSurName'];
     profileUrl = userMap['profileUrl'];
-    location = userMap['location'];
   }
   Map<String, dynamic> toMap() {
     Map<String, dynamic> userMap = Map<String, dynamic>();
@@ -23,9 +28,7 @@ class AppUser {
     userMap['userName'] = userName;
     userMap['email'] = email;
     userMap['nameAndSurName'] = nameAndSurName;
-    userMap['profileUrl'] = profileUrl ??
-        "https://www.gstatic.com/mobilesdk/160503_mobilesdk/logo/2x/firebase_28dp.png";
-    userMap['location'] = location;
+    userMap['profileUrl'] = profileUrl;
     return userMap;
   }
 }

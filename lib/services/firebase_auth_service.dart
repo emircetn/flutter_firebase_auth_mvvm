@@ -29,7 +29,7 @@ class FirebaseAuthService extends AuthService {
           accessToken: _googleAuth.accessToken,
         ));
         User _firebaseUser = userFB.user;
-        return _firebaseUserToAppUser(_firebaseUser);
+        return _firebaseGoogleUserToAppUser(_firebaseUser);
       } else
         return null;
     } else
@@ -55,8 +55,9 @@ class FirebaseAuthService extends AuthService {
   @override
   Future<String> registerWithMail(String email, String password) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      UserCredential userCredential = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      userCredential.user.sendEmailVerification();
       return "no-verified";
     } on FirebaseAuthException catch (e) {
       return e.code;
@@ -80,7 +81,17 @@ class FirebaseAuthService extends AuthService {
     }
   }
 
-  AppUser _firebaseUserToAppUser(User user) {
-    return AppUser.toFirebase(userID: user.uid, email: user.email);
+  AppUser _firebaseUserToAppUser(User firebaseUser) {
+    return AppUser.toFirebaseUser(
+        userID: firebaseUser.uid, email: firebaseUser.email);
+  }
+
+  AppUser _firebaseGoogleUserToAppUser(User firebaseGoogleUser) {
+    return AppUser.toFirebaseGoogleUser(
+      userID: firebaseGoogleUser.uid,
+      email: firebaseGoogleUser.email,
+      nameAndSurName: firebaseGoogleUser.displayName,
+      profileUrl: firebaseGoogleUser.photoURL,
+    );
   }
 }

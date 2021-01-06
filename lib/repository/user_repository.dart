@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auth_firebase/models/app_user.dart';
 import 'package:auth_firebase/services/firebase_auth_service.dart';
 import 'package:auth_firebase/services/firebase_firestore_service.dart';
@@ -6,7 +8,7 @@ import 'package:auth_firebase/utils/get_it.dart';
 
 class UserRepository {
   //////////////////singleton olarak servisler tanımlandı////////////////////
-  ///
+
   FirebaseAuthService _firebaseAuthService = getIt<FirebaseAuthService>();
   FirebaseFirestoreService _firebaseFirestoreService =
       getIt<FirebaseFirestoreService>();
@@ -19,7 +21,7 @@ class UserRepository {
     if (appUserFB != null) {
       AppUser appUserDB = await _firebaseFirestoreService
           .readUserFromDatabase(appUserFB.userID);
-      if (appUserFB != null)
+      if (appUserDB != null)
         return appUserDB;
       else
         return appUserFB;
@@ -72,6 +74,12 @@ class UserRepository {
 
   Future<bool> saveUserToDatabase(AppUser appUser) async {
     return await _firebaseFirestoreService.saveUserToDatabase(appUser);
+  }
+
+  Future<String> uploadProfilePhotoToDatabase(
+      String userID, File profilePicture) async {
+    return await _firebaseStrogeService.uploadProfilePhotoToDatabase(
+        userID, profilePicture);
   }
 
   ////////////////////////////////////////////////////////////////////////////
