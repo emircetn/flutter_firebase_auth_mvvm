@@ -11,7 +11,7 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  UserModelView userModelView;
+  late UserModelView userModelView;
   @override
   void initState() {
     super.initState();
@@ -29,7 +29,7 @@ class _LandingPageState extends State<LandingPage> {
     } else {
       if (userModelView.appUser == null)
         return FirstPage();
-      else if (userModelView.appUser.userName != null) {
+      else if (userModelView.appUser!.userName != null) {
         return HomePage();
       } else
         return CompleteProfileInformationPage();

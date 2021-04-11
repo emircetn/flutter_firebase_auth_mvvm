@@ -14,7 +14,6 @@ class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
       body: SafeArea(
         child: Column(
           children: [
@@ -63,29 +62,23 @@ class _FirstPageState extends State<FirstPage> {
             ),
             buttonText: "Email ile Kayıt",
             buttonColor: Colors.orange[400],
-            buttonOnPressed: () =>
-                Navigator.pushNamed(context, RouteConstant.REGISTER_PAGE_ROUTE),
+            buttonOnPressed: () => Navigator.pushNamed(context, RouteConstant.REGISTER_PAGE_ROUTE),
           ),
-          FlatButton(
-              onPressed: () =>
-                  Navigator.pushNamed(context, RouteConstant.LOGIN_PAGE_ROUTE),
+          TextButton(
+              onPressed: () => Navigator.pushNamed(context, RouteConstant.LOGIN_PAGE_ROUTE),
               child: RichText(
-                  text: TextSpan(
-                      text: "Zaten Hesabınız Var Mı?",
-                      style: Theme.of(context).textTheme.overline,
-                      children: <TextSpan>[
-                    TextSpan(
-                        text: " Giriş Yapın",
-                        style: Theme.of(context).textTheme.overline.copyWith(
-                              color: Theme.of(context).accentColor,
-                              fontWeight: FontWeight.bold,
-                            )),
-                  ]))),
+                  text: TextSpan(text: "Zaten Hesabınız Var Mı?", style: Theme.of(context).textTheme.overline, children: <TextSpan>[
+                TextSpan(
+                    text: " Giriş Yapın",
+                    style: Theme.of(context).textTheme.overline!.copyWith(
+                          color: Theme.of(context).accentColor,
+                          fontWeight: FontWeight.bold,
+                        )),
+              ]))),
         ],
       );
 
   Future loginOrRegisterWithGoogle() async {
-    await Provider.of<UserModelView>(context, listen: false)
-        .loginOrRegisterWithGoogle();
+    await Provider.of<UserModelView>(context, listen: false).loginOrRegisterWithGoogle();
   }
 }

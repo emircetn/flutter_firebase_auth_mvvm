@@ -8,11 +8,11 @@ import 'package:flutter/cupertino.dart';
 enum UserViewState { IDLE, BUSY }
 
 class UserModelView extends ChangeNotifier {
-  UserRepository _userRepository = getIt<UserRepository>();
+  UserRepository? _userRepository = getIt<UserRepository>();
 
   UserViewState _state = UserViewState.IDLE;
-  AppUser appUser;
-  String userNameValidator;
+  AppUser? appUser;
+  String? userNameValidator;
 
   UserViewState get stateGet => _state;
   set stateSet(UserViewState state) {
@@ -26,7 +26,7 @@ class UserModelView extends ChangeNotifier {
 
   Future currentUser() async {
     stateSet = UserViewState.BUSY;
-    appUser = await _userRepository.currentUser();
+    appUser = await _userRepository!.currentUser();
     stateSet = UserViewState.IDLE;
   }
 
@@ -34,14 +34,14 @@ class UserModelView extends ChangeNotifier {
 
   Future<String> registerWithMail(String email, String password) async {
     stateSet = UserViewState.BUSY;
-    var result = await _userRepository.registerWithMail(email, password);
+    var result = await _userRepository!.registerWithMail(email, password);
     stateSet = UserViewState.IDLE;
     return result;
   }
 
   Future<String> loginWithMail(String email, String password) async {
     stateSet = UserViewState.BUSY;
-    var result = await _userRepository.loginWithMail(email, password);
+    var result = await _userRepository!.loginWithMail(email, password);
     stateSet = UserViewState.IDLE;
     if (result is AppUser) {
       appUser = result;
@@ -52,32 +52,33 @@ class UserModelView extends ChangeNotifier {
   }
 
   Future signOut() async {
-    await _userRepository.signOut();
+    await _userRepository!.signOut();
     appUser = null;
   }
 
   Future loginOrRegisterWithGoogle() async {
     stateSet = UserViewState.BUSY;
-    appUser = await _userRepository.loginOrRegisterWithGoogle();
+    appUser = await _userRepository!.loginOrRegisterWithGoogle();
     stateSet = UserViewState.IDLE;
   }
 
   ///////////////////////////////////////////////////////////////////////////////////
   ///////////////////////////////control-functions////////////////////////////////////
 
-  String emailCheck(String email) {
-    if (RegExp(
-            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-        .hasMatch(email)) {
-      return null;
-    } else if (email.length == 0) {
+  String? emailCheck(String? email) {
+    if (email == null || email.length == 0) {
       return "Lütfen email adresinizi girin";
+    } else if (RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email)) {
+      return null;
     } else {
       return "email geçersiz";
     }
   }
 
-  String passwordCheck(String password) {
+  String? passwordCheck(String? password) {
+    if (password == null || password.length == 0) {
+      return "Lütfen parola girin";
+    }
     if (password.length > 5) {
       return null;
     } else {
@@ -85,11 +86,10 @@ class UserModelView extends ChangeNotifier {
     }
   }
 
-  String nameAndSurnameCheck(String nameAndSurname) {
+  String? nameAndSurnameCheck(String nameAndSurname) {
     if (nameAndSurname.length < 1) {
       return "En az 2 karakter olabilir";
-    } else if (!RegExp(r"^(?=[a-zA-ZğüşiöçĞÜŞİÖÇ ]{3,10}$)")
-        .hasMatch(nameAndSurname)) {
+    } else if (!RegExp(r"^(?=[a-zA-ZğüşiöçĞÜŞİÖÇ ]{3,10}$)").hasMatch(nameAndSurname)) {
       return "İsim soyisim  özel karakterler içermemeli";
     } else if (!nameAndSurname.contains(" ")) {
       return "İsim ve Soyisminizi boşluk ile ayırın";
@@ -102,11 +102,11 @@ class UserModelView extends ChangeNotifier {
     }
   }
 
-  Future userNameCheck(String userName) async {
-    if (!(await _userRepository.userNameCheckFromDatabase(userName))) {
+  Future userNameCheck(String? userName) async {
+    if (!(await _userRepository!.userNameCheckFromDatabase(userName))) {
       userName = "username is already taken";
     }
-    if (userName.length < 3) {
+    if (userName!.length < 3) {
       userNameValidator = "kullanıcı adı en az 3 karakter olabilir";
     } else if (userName.length > 10) {
       userNameValidator = "kullanıcı adı en fazla 10 karakter olabilir";
@@ -122,19 +122,18 @@ class UserModelView extends ChangeNotifier {
 
   Future<bool> saveUserToDatabase(AppUser user) async {
     stateSet = UserViewState.BUSY;
-    bool result = await _userRepository.saveUserToDatabase(user);
+    bool result = await _userRepository!.saveUserToDatabase(user);
     if (result == true) appUser = user;
     stateSet = UserViewState.IDLE;
     return result;
   }
 
   Future<bool> sendPasswordResetEmail(String email) async {
-    return await _userRepository.sendPasswordResetEmail(email);
+    return await (_userRepository!.sendPasswordResetEmail(email));
   }
 
-  Future<String> uploadProfilePhotoToDatabase(File profilePicture) async {
-    return await _userRepository.uploadProfilePhotoToDatabase(
-        appUser.userID, profilePicture);
+  Future<String?> uploadProfilePhotoToDatabase(File profilePicture) async {
+    return await _userRepository!.uploadProfilePhotoToDatabase(appUser!.userID!, profilePicture);
   }
 
   /////////////////////////////////////////////////////////////////////////////////////

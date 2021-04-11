@@ -12,17 +12,15 @@ import 'package:image_cropper/image_cropper.dart';
 
 class CompleteProfileInformationPage extends StatefulWidget {
   @override
-  _CompleteProfileInformationPageState createState() =>
-      _CompleteProfileInformationPageState();
+  _CompleteProfileInformationPageState createState() => _CompleteProfileInformationPageState();
 }
 
-class _CompleteProfileInformationPageState
-    extends State<CompleteProfileInformationPage> {
-  GlobalKey<FormState> _formKey;
+class _CompleteProfileInformationPageState extends State<CompleteProfileInformationPage> {
+  GlobalKey<FormState>? _formKey;
 
-  String _userName, _nameAndSurname;
-  File _profilePicture;
-  String _profilPictureUrl;
+  String? _userName, _nameAndSurname;
+  File? _profilePicture;
+  String? _profilPictureUrl;
   final picker = ImagePicker();
   @override
   void initState() {
@@ -33,8 +31,8 @@ class _CompleteProfileInformationPageState
 
   void setUserInformaiton() {
     final userModelView = Provider.of<UserModelView>(context, listen: false);
-    _nameAndSurname = userModelView.appUser.nameAndSurName;
-    _profilPictureUrl = userModelView.appUser.profileUrl;
+    _nameAndSurname = userModelView.appUser!.nameAndSurName;
+    _profilPictureUrl = userModelView.appUser!.profileUrl;
   }
 
   @override
@@ -70,7 +68,7 @@ class _CompleteProfileInformationPageState
               elevation: 4,
               child: _profilPictureUrl != null
                   ? Image.network(
-                      _profilPictureUrl,
+                      _profilPictureUrl!,
                       fit: BoxFit.cover,
                     )
                   : _profilePicture == null
@@ -78,7 +76,7 @@ class _CompleteProfileInformationPageState
                           AssetContants.IMAGE_PATH + "profile.png",
                           fit: BoxFit.cover,
                         )
-                      : Image.file(_profilePicture, fit: BoxFit.cover),
+                      : Image.file(_profilePicture!, fit: BoxFit.cover),
             ),
           ),
           Align(
@@ -91,8 +89,7 @@ class _CompleteProfileInformationPageState
         ],
       ));
 
-  textFields() =>
-      Consumer<UserModelView>(builder: (context, userModelView, widget) {
+  textFields() => Consumer<UserModelView>(builder: (context, userModelView, widget) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
@@ -103,8 +100,7 @@ class _CompleteProfileInformationPageState
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     autofocus: true,
-                    initialValue:
-                        _nameAndSurname != null ? _nameAndSurname : "",
+                    initialValue: _nameAndSurname != null ? _nameAndSurname : "",
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
@@ -117,8 +113,7 @@ class _CompleteProfileInformationPageState
                     onSaved: (nameAndSurname) {
                       _nameAndSurname = nameAndSurname;
                     },
-                    validator: (nameAndSurname) =>
-                        userModelView.nameAndSurnameCheck(nameAndSurname),
+                    validator: (nameAndSurname) => userModelView.nameAndSurnameCheck(nameAndSurname!),
                   ),
                 ),
                 Padding(
@@ -143,7 +138,7 @@ class _CompleteProfileInformationPageState
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(),
-                    FlatButton(
+                    TextButton(
                       onPressed: () async => await submitInformation(),
                       child: Text("Tamamla"),
                     )
@@ -157,21 +152,13 @@ class _CompleteProfileInformationPageState
 
   Future submitInformation() async {
     final userModelView = Provider.of<UserModelView>(context, listen: false);
-    _formKey.currentState.save();
+    _formKey!.currentState!.save();
     await userModelView.userNameCheck(_userName);
-    if (_formKey.currentState.validate()) {
-      AppUser user = await setInputs(userModelView.appUser);
+    if (_formKey!.currentState!.validate()) {
+      AppUser user = await (setInputs(userModelView.appUser!));
       bool result = await userModelView.saveUserToDatabase(user);
       if (result == false) showToast("Bir hata oluştu");
     }
-  }
-
-  void showToast(String msg) {
-    Fluttertoast.showToast(
-      gravity: ToastGravity.CENTER,
-      toastLength: Toast.LENGTH_LONG,
-      msg: msg,
-    );
   }
 
   Future setInputs(AppUser appUser) async {
@@ -182,14 +169,12 @@ class _CompleteProfileInformationPageState
     return user;
   }
 
-  Future<String> uploadProfilePhoto() async {
+  Future<String?> uploadProfilePhoto() async {
     if (_profilePicture != null) {
       final userModelView = Provider.of<UserModelView>(context, listen: false);
-      String result =
-          await userModelView.uploadProfilePhotoToDatabase(_profilePicture);
+      String? result = await userModelView.uploadProfilePhotoToDatabase(_profilePicture!);
       if (result == null) {
-        showToast(
-            "Profil fotoğrafınız yüklenemedi. Lütfen daha sonra tekrar deneyin");
+        showToast("Profil fotoğrafınız yüklenemedi. Lütfen daha sonra tekrar deneyin");
       }
       return result;
     } else if (_profilPictureUrl != null) {
@@ -235,9 +220,8 @@ class _CompleteProfileInformationPageState
         });
   }
 
-  void getCamera() async {
-    final _picture = await picker.getImage(
-        source: ImageSource.camera, maxWidth: 500.0, maxHeight: 500.0);
+  Future<void> getCamera() async {
+    final _picture = await picker.getImage(source: ImageSource.camera, maxWidth: 500.0, maxHeight: 500.0);
     if (_picture != null) {
       _profilePicture = await cropImage(_picture);
       _profilPictureUrl = null;
@@ -246,9 +230,8 @@ class _CompleteProfileInformationPageState
     }
   }
 
-  void getGallery() async {
-    final _picture = await picker.getImage(
-        source: ImageSource.gallery, maxWidth: 500.0, maxHeight: 500.0);
+  Future<void> getGallery() async {
+    final _picture = await picker.getImage(source: ImageSource.gallery, maxWidth: 500.0, maxHeight: 500.0);
     if (_picture != null) {
       _profilePicture = await cropImage(_picture);
       _profilPictureUrl = null;
@@ -263,8 +246,8 @@ class _CompleteProfileInformationPageState
     setState(() {});
   }
 
-  Future<File> cropImage(PickedFile pickedFile) async {
-    File _picture;
+  Future<File?> cropImage(PickedFile pickedFile) async {
+    File? _picture;
     _picture = await ImageCropper.cropImage(
         sourcePath: pickedFile.path,
         aspectRatioPresets: [
@@ -273,12 +256,20 @@ class _CompleteProfileInformationPageState
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: "Kırp",
             toolbarColor: Theme.of(context).primaryColor,
-            toolbarWidgetColor: Theme.of(context).textSelectionColor,
+            toolbarWidgetColor: Theme.of(context).primaryColor,
             initAspectRatio: CropAspectRatioPreset.square,
             lockAspectRatio: true),
         iosUiSettings: IOSUiSettings(
           minimumAspectRatio: 1.0,
         ));
     return _picture;
+  }
+
+  void showToast(String msg) {
+    Fluttertoast.showToast(
+      gravity: ToastGravity.CENTER,
+      toastLength: Toast.LENGTH_LONG,
+      msg: msg,
+    );
   }
 }

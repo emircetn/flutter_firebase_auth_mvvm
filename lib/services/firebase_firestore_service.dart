@@ -7,10 +7,9 @@ class FirebaseFirestoreService extends DatabaseService {
   final String userCollection = "users";
 
   @override
-  Future readUserFromDatabase(String userID) async {
-    DocumentSnapshot _documentSnapshot =
-        await _firebaseFirestore.collection(userCollection).doc(userID).get();
-    Map<String, dynamic> _userMap = _documentSnapshot.data();
+  Future<AppUser?> readUserFromDatabase(String? userID) async {
+    DocumentSnapshot _documentSnapshot = await _firebaseFirestore.collection(userCollection).doc(userID).get();
+    Map<String, dynamic>? _userMap = _documentSnapshot.data();
     if (_userMap == null)
       return null;
     else
@@ -18,28 +17,24 @@ class FirebaseFirestoreService extends DatabaseService {
   }
 
   @override
-  Future saveOrReadGoogleUserToDatabase(AppUser appUser) async {
-    AppUser user;
-    DocumentReference dr =
-        _firebaseFirestore.collection("users").doc(appUser.userID);
+  Future<AppUser?> saveOrReadGoogleUserToDatabase(AppUser appUser) async {
+    AppUser? user;
+    DocumentReference dr = _firebaseFirestore.collection("users").doc(appUser.userID);
     DocumentSnapshot documentSnapshot = await dr.get();
     if (!documentSnapshot.exists) {
       Map<String, dynamic> userMap = appUser.toMap();
       await dr.set(userMap);
       user = AppUser.fromMap(userMap);
     } else {
-      user = await readUserFromDatabase(appUser.userID);
+      user = await (readUserFromDatabase(appUser.userID));
     }
     return user;
   }
 
   @override
-  Future saveUserToDatabase(AppUser appUser) async {
+  Future<bool> saveUserToDatabase(AppUser appUser) async {
     try {
-      await _firebaseFirestore
-          .collection(userCollection)
-          .doc(appUser.userID)
-          .set(appUser.toMap());
+      await _firebaseFirestore.collection(userCollection).doc(appUser.userID).set(appUser.toMap());
       return true;
     } catch (e) {
       return false;
@@ -47,11 +42,8 @@ class FirebaseFirestoreService extends DatabaseService {
   }
 
   @override
-  Future<bool> userNameCheckFromDatabase(String userName) async {
-    QuerySnapshot users = await _firebaseFirestore
-        .collection(userCollection)
-        .where("userName", isEqualTo: userName)
-        .get();
+  Future<bool> userNameCheckFromDatabase(String? userName) async {
+    QuerySnapshot users = await _firebaseFirestore.collection(userCollection).where("userName", isEqualTo: userName).get();
     if (users.docs.length > 0) {
       return false;
     }

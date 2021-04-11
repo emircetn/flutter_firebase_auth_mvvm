@@ -20,15 +20,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<UserModelView>(
       create: (_) => UserModelView(),
-      child: ScreenUtilInit(
-        child: MaterialApp(
+      child: ScreenUtilInit(builder: () {
+        return MaterialApp(
           title: "Firebase Auth",
           onGenerateRoute: RouterService.generateRoute,
           theme: ThemeConstants.lightTheme,
           debugShowCheckedModeBanner: false,
           home: LandingPage(),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

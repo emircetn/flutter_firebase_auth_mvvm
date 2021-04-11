@@ -1,17 +1,15 @@
-import 'package:flutter/material.dart';
-
 class AppUser {
-  String userID, userName, nameAndSurName, profileUrl, email;
+  String? userID, userName, nameAndSurName, profileUrl, email;
 
   AppUser.toFirebaseUser({
-    @required this.userID,
-    @required this.email,
+    required this.userID,
+    required this.email,
   });
   AppUser.toFirebaseGoogleUser({
-    @required this.userID,
-    @required this.email,
-    @required this.nameAndSurName,
-    @required this.profileUrl,
+    required this.userID,
+    required this.email,
+    required this.nameAndSurName,
+    required this.profileUrl,
   });
 
   AppUser.fromMap(Map<String, dynamic> userMap) {

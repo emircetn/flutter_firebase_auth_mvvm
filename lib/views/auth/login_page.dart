@@ -12,9 +12,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String _email, _password;
-  GlobalKey<FormState> _formKey;
-  GlobalKey<ScaffoldState> _scaffoldKey;
+  String? _email, _password;
+  GlobalKey<FormState>? _formKey;
+  GlobalKey<ScaffoldState>? _scaffoldKey;
 
   @override
   void initState() {
@@ -41,8 +41,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  formField() =>
-      Consumer<UserModelView>(builder: (context, userModelView, widget) {
+  formField() => Consumer<UserModelView>(builder: (context, userModelView, widget) {
         return SingleChildScrollView(
           child: Form(
               key: _formKey,
@@ -65,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                       onSaved: (email) {
                         _email = email;
                       },
-                      validator: (email) => userModelView.emailCheck(email),
+                      validator: (email) => userModelView.emailCheck(email!),
                     ),
                   ),
                   Padding(
@@ -84,8 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                       onSaved: (password) {
                         _password = password;
                       },
-                      validator: (password) =>
-                          userModelView.passwordCheck(password),
+                      validator: (password) => userModelView.passwordCheck(password!),
                     ),
                   ),
                   userModelView.stateGet == UserViewState.IDLE
@@ -96,10 +94,9 @@ class _LoginPageState extends State<LoginPage> {
                           buttonOnPressed: () async => await loginWithMail(),
                         )
                       : CircularProgressIndicator(),
-                  FlatButton(
+                  TextButton(
                     child: Text("Şifremi Unuttum"),
-                    onPressed: () async =>
-                        await showModalSheetForResetPassword(),
+                    onPressed: () async => await showModalSheetForResetPassword(),
                   )
                 ],
               )),
@@ -107,16 +104,11 @@ class _LoginPageState extends State<LoginPage> {
       });
 
   Future loginWithMail() async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      String result = await Provider.of<UserModelView>(context, listen: false)
-          .loginWithMail(_email, _password);
+    if (_formKey!.currentState!.validate()) {
+      _formKey!.currentState!.save();
+      String result = await Provider.of<UserModelView>(context, listen: false).loginWithMail(_email!, _password!);
       if (result == "no-verified") {
-        Fluttertoast.showToast(
-            gravity: ToastGravity.CENTER,
-            toastLength: Toast.LENGTH_LONG,
-            msg:
-                "Size hesabınızı doğrulamanız için mail gönderdik, hesabızı doğruladıktan sonra giriş yapabilirsiniz");
+        showToast("Size hesabınızı doğrulamanız için mail gönderdik, hesabızı doğruladıktan sonra giriş yapabilirsiniz");
       } else if (result == "success") {
         Navigator.pop(context);
       } else {
@@ -126,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void showSnackBar(String result) async {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Theme.of(context).primaryColor,
         content: Text(
           result,
@@ -150,8 +142,7 @@ class _LoginPageState extends State<LoginPage> {
           return SingleChildScrollView(
               child: Container(
                   color: Theme.of(context).canvasColor,
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: Padding(
                       padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 5.0),
                       child: Column(
@@ -167,9 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                             key: forgetPassFormKey,
                             child: TextFormField(
                               validator: (c) {
-                                if (RegExp(
-                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                    .hasMatch(c)) {
+                                if (RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(c!)) {
                                   return null;
                                 } else {
                                   return "email geçersiz";
@@ -187,8 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                                 icon: Icon(
                                   Icons.mail,
                                 ),
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 8),
+                                contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
                               ),
                             ),
                           ),
@@ -196,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              FlatButton(
+                              TextButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
@@ -208,12 +196,10 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
-                              FlatButton(
+                              TextButton(
                                 onPressed: () async {
-                                  if (forgetPassFormKey.currentState
-                                      .validate()) {
-                                    await sendPasswordResetEmail(
-                                        resetMailController.text);
+                                  if (forgetPassFormKey.currentState!.validate()) {
+                                    await sendPasswordResetEmail(resetMailController.text);
                                   }
                                 },
                                 child: Text(

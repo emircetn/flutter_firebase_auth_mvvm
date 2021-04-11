@@ -13,9 +13,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  String _email, _password;
-  GlobalKey<FormState> _formKey;
-  GlobalKey<ScaffoldState> _scaffoldKey;
+  String? _email, _password;
+  late GlobalKey<FormState> _formKey;
+  late GlobalKey<ScaffoldState> _scaffoldKey;
 
   @override
   void initState() {
@@ -87,8 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     onSaved: (password) {
                       _password = password;
                     },
-                    validator: (password) =>
-                        userModelView.passwordCheck(password),
+                    validator: (password) => userModelView.passwordCheck(password),
                   ),
                 ),
                 userModelView.stateGet == UserViewState.IDLE
@@ -106,16 +105,14 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
   Future registerWithMail() async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      String result = await Provider.of<UserModelView>(context, listen: false)
-          .registerWithMail(_email, _password);
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      String result = await Provider.of<UserModelView>(context, listen: false).registerWithMail(_email!, _password!);
       if (result == "no-verified") {
         Fluttertoast.showToast(
             gravity: ToastGravity.CENTER,
             toastLength: Toast.LENGTH_LONG,
-            msg:
-                "Size hesabınızı doğrulamanız için mail gönderdik, lütfen hesabızı doğruladıktan sonra giriş yapın");
+            msg: "Size hesabınızı doğrulamanız için mail gönderdik, lütfen hesabızı doğruladıktan sonra giriş yapın");
         Navigator.pushReplacementNamed(context, RouteConstant.LOGIN_PAGE_ROUTE);
       } else {
         showSnackBar(ErrorConstants.showError(result));
@@ -124,7 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void showSnackBar(String result) async {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Theme.of(context).primaryColor,
         content: Text(
           result,

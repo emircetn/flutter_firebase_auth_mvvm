@@ -1,0 +1,90 @@
+{
+    "todo-tree.filtering.excludeGlobs": [
+      "**/*.json"
+    ],
+    "todo-tree.tree.labelFormat": "${after}",
+    "todo-tree.tree.grouped": true,
+    "todo-tree.tree.tagsOnly": true,
+    "todo-tree.general.tags": [
+      "TODO:",
+      "BUG:",
+      "DEV:",
+      "RES:",
+      "OLD:",
+      "WARN:",
+      "TIP:"
+    ],
+    "todo-tree.highlights.defaultHighlight": {
+      "icon": "tasklist",
+      "type": "text",
+      "background": "#6FA5FF",
+      "opacity": 17,
+      "iconColour": "#6FA5FF"
+    },
+    "todo-tree.highlights.customHighlight": {
+      // TIP: Bilgiler (tip)	
+      "TIP:": {
+        "icon": "book",
+        "type": "text",
+        "foreground": "#f5f2a9",
+        "background": "#f5f2a9",
+        "opacity": 7,
+        "iconColour": "#f5f2a9"
+      },
+      // TODO:: Yapılacak (todo)	
+      "TODO:": {
+        "icon": "checklist",
+        "type": "text",
+        "fontStyle": "normal",
+        "foreground": "#6FA5FF",
+        "background": "#6FA5FF",
+        "opacity": 7,
+        "iconColour": "#6FA5FF"
+      },
+      // BUG: Hatalar (bug)	
+      "BUG:": {
+        "icon": "bug",
+        "type": "text",
+        "foreground": "#FF2C2C",
+        "background": "#FF2C2C",
+        "opacity": 7,
+        "iconColour": "#FF2C2C"
+      },
+      // DEV: İyileştirme, geliştirme (dev)	
+      "DEV:": {
+        "icon": "telescope",
+        "type": "text",
+        "foreground": "#72CB6A",
+        "background": "#72CB6A",
+        "opacity": 7,
+        "iconColour": "#72CB6A"
+      },
+      // RES: Gelecek planları, araştırmalar (res)	
+      "RES:": {
+        "icon": "beaker",
+        "type": "text",
+        "foreground": "#9CF7FF",
+        "background": "#9CF7FF",
+        "opacity": 7,
+        "iconColour": "#9CF7FF"
+      },
+      // WARN: Uyarılar (warn)	
+      "WARN:": {
+        "icon": "megaphone",
+        "type": "text",
+        "foreground": "#CFCC35",
+        "background": "#CFCC35",
+        "opacity": 7,
+        "iconColour": "#CFCC35"
+      },
+      // OLD: Eskimiş, kaldırılacak (deprecated)	
+      "OLD:": {
+        "icon": "trashcan",
+        "type": "text",
+        "foreground": "#959595",
+        "background": "#959595",
+        "opacity": 7,
+        "iconColour": "#959595"
+      }
+    }
+  }

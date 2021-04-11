@@ -19,7 +19,6 @@ class ErrorConstants {
         return "Email Adresi geçersiz";
       case "firebase_auth":
         return "Lütfen Email Adresinizi girin";
-
       default:
         return "Beklenmedik Bir Hata oluştu";
     }

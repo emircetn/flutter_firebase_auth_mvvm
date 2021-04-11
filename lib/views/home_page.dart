@@ -40,21 +40,23 @@ class _HomePageState extends State<HomePage> {
       children: [
         CircleAvatar(
           radius: 50.h,
-          backgroundImage: NetworkImage(userModelView.appUser.profileUrl),
+          backgroundImage: NetworkImage(userModelView.appUser!.profileUrl!),
         ),
-        Text(userModelView.appUser.nameAndSurName),
-        Text("@" + userModelView.appUser.userName),
+        Text(userModelView.appUser!.nameAndSurName!),
+        Text("@" + userModelView.appUser!.userName!),
         userModelView.stateGet == UserViewState.IDLE
-            ? RaisedButton(
+            ? TextButton(
                 onPressed: () async {
                   await userModelView.signOut();
-                  Navigator.pushNamedAndRemoveUntil(context,
-                      RouteConstant.LANDING_PAGE_ROUTE, (route) => false);
+                  Navigator.pushNamedAndRemoveUntil(context, RouteConstant.LANDING_PAGE_ROUTE, (route) => false);
                 },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                color: Theme.of(context).primaryColor,
+                style: ButtonStyle(
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor)),
                 child: Text(
                   "Çıkış Yap",
                   style: Theme.of(context).textTheme.overline,
