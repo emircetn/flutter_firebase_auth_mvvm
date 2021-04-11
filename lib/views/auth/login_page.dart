@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
       key: _scaffoldKey,
       backgroundColor: Theme.of(context).canvasColor,
       appBar: AppBar(
-        title: Text("Giriş Yapın"),
+        title: Text('Giriş Yapın'),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  formField() => Consumer<UserModelView>(builder: (context, userModelView, widget) {
+  Consumer<UserModelView> formField() => Consumer<UserModelView>(builder: (context, userModelView, widget) {
         return SingleChildScrollView(
           child: Form(
               key: _formKey,
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                          labelText: "Emailinizi Girin",
+                          labelText: 'Emailinizi Girin',
                           suffixIcon: Icon(
                             Icons.mail,
                             color: Theme.of(context).accentColor,
@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: true,
                       decoration: InputDecoration(
-                          labelText: "Parolanızı Girin",
+                          labelText: 'Parolanızı Girin',
                           suffixIcon: Icon(
                             Icons.security_rounded,
                             color: Theme.of(context).accentColor,
@@ -89,14 +89,14 @@ class _LoginPageState extends State<LoginPage> {
                   userModelView.stateGet == UserViewState.IDLE
                       ? AuthButton(
                           buttonIcon: Container(),
-                          buttonText: "Giriş Yap",
+                          buttonText: 'Giriş Yap',
                           buttonColor: Theme.of(context).accentColor,
                           buttonOnPressed: () async => await loginWithMail(),
                         )
                       : CircularProgressIndicator(),
                   TextButton(
-                    child: Text("Şifremi Unuttum"),
                     onPressed: () async => await showModalSheetForResetPassword(),
+                    child: Text('Şifremi Unuttum'),
                   )
                 ],
               )),
@@ -106,10 +106,10 @@ class _LoginPageState extends State<LoginPage> {
   Future loginWithMail() async {
     if (_formKey!.currentState!.validate()) {
       _formKey!.currentState!.save();
-      String result = await Provider.of<UserModelView>(context, listen: false).loginWithMail(_email!, _password!);
-      if (result == "no-verified") {
-        showToast("Size hesabınızı doğrulamanız için mail gönderdik, hesabızı doğruladıktan sonra giriş yapabilirsiniz");
-      } else if (result == "success") {
+      var result = await Provider.of<UserModelView>(context, listen: false).loginWithMail(_email!, _password!);
+      if (result == 'no-verified') {
+        showToast('Size hesabınızı doğrulamanız için mail gönderdik, hesabızı doğruladıktan sonra giriş yapabilirsiniz');
+      } else if (result == 'success') {
         Navigator.pop(context);
       } else {
         showSnackBar(ErrorConstants.showError(result));
@@ -123,9 +123,9 @@ class _LoginPageState extends State<LoginPage> {
         content: Text(
           result,
         ),
-        action: result == "wrong-password"
+        action: result == 'wrong-password'
             ? SnackBarAction(
-                label: "Parolanızı Mı Unuttunuz?",
+                label: 'Parolanızı Mı Unuttunuz?',
                 onPressed: () {
                   //fireabse kodu yaz toast göster
                 },
@@ -136,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
   Future showModalSheetForResetPassword() async {
     var forgetPassFormKey = GlobalKey<FormState>();
     var resetMailController = TextEditingController();
-    showModalBottomSheet(
+    await showModalBottomSheet(
         isScrollControlled: true,
         builder: (BuildContext context) {
           return SingleChildScrollView(
@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Email adresinizi giriniz",
+                            'Email adresinizi giriniz',
                           ),
                           SizedBox(
                             height: ScreenUtil().setHeight(15),
@@ -161,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                                 if (RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(c!)) {
                                   return null;
                                 } else {
-                                  return "email geçersiz";
+                                  return 'email geçersiz';
                                 }
                               },
                               autofocus: true,
@@ -189,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.of(context).pop();
                                 },
                                 child: Text(
-                                  "İptal",
+                                  'İptal',
                                   style: TextStyle(
                                     color: Theme.of(context).cardColor,
                                     /*  fontSize: ScreenUtil().setSp(12), */
@@ -203,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                                   }
                                 },
                                 child: Text(
-                                  "Gönder",
+                                  'Gönder',
                                   style: TextStyle(
                                     color: Theme.of(context).primaryColorDark,
                                   ),
@@ -219,12 +219,13 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> sendPasswordResetEmail(String email) async {
     final _userModel = Provider.of<UserModelView>(context, listen: false);
-    bool result = await _userModel.sendPasswordResetEmail(email);
+    var result = await _userModel.sendPasswordResetEmail(email);
     Navigator.of(context).pop();
-    if (result)
-      showToast("Email gönderildi");
-    else
-      showToast("Email gönderilemedi");
+    if (result) {
+      showToast('Email gönderildi');
+    } else {
+      showToast('Email gönderilemedi');
+    }
   }
 
   void showToast(String msg) {

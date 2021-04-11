@@ -20,7 +20,7 @@ class AppUser {
     profileUrl = userMap['profileUrl'];
   }
   Map<String, dynamic> toMap() {
-    Map<String, dynamic> userMap = Map<String, dynamic>();
+    var userMap = <String, dynamic>{};
 
     userMap['userID'] = userID;
     userMap['userName'] = userName;

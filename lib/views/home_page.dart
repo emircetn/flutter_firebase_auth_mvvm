@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "HOŞGELDİNİZ",
+                  'HOŞGELDİNİZ',
                   style: Theme.of(context).textTheme.headline4,
                 ),
               ),
@@ -43,12 +43,12 @@ class _HomePageState extends State<HomePage> {
           backgroundImage: NetworkImage(userModelView.appUser!.profileUrl!),
         ),
         Text(userModelView.appUser!.nameAndSurName!),
-        Text("@" + userModelView.appUser!.userName!),
+        Text('@' + userModelView.appUser!.userName!),
         userModelView.stateGet == UserViewState.IDLE
             ? TextButton(
                 onPressed: () async {
                   await userModelView.signOut();
-                  Navigator.pushNamedAndRemoveUntil(context, RouteConstant.LANDING_PAGE_ROUTE, (route) => false);
+                  await Navigator.pushNamedAndRemoveUntil(context, RouteConstant.LANDING_PAGE_ROUTE, (route) => false);
                 },
                 style: ButtonStyle(
                     shape: MaterialStateProperty.all(
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor)),
                 child: Text(
-                  "Çıkış Yap",
+                  'Çıkış Yap',
                   style: Theme.of(context).textTheme.overline,
                 ),
               )

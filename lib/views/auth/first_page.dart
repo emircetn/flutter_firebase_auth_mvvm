@@ -17,41 +17,41 @@ class _FirstPageState extends State<FirstPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Expanded(child: firstPart()),
-            Expanded(child: secondPart()),
+            Expanded(child: header()),
+            Expanded(child: buttons()),
           ],
         ),
       ),
     );
   }
 
-  firstPart() => Column(
+  Column header() => Column(
         children: [
           Expanded(
             flex: 5,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Image.asset(AssetContants.instance.imagePath + "hello".toPNG),
+              child: Image.asset(AssetContants.instance.imagePath + 'hello'.toPNG),
             ),
           ),
           Expanded(
               flex: 1,
               child: Text(
-                "Merhaba. Devam Etmek İçin Giriş Yapın",
+                'Merhaba. Devam Etmek İçin Giriş Yapın',
                 style: Theme.of(context).textTheme.overline,
               ))
         ],
       );
 
-  secondPart() => Column(
+  Column buttons() => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           AuthButton(
             buttonIcon: Image.asset(
-              AssetContants.instance.imagePath + "google_logo".toPNG,
+              AssetContants.instance.imagePath + 'google_logo'.toPNG,
               color: Colors.white,
             ),
-            buttonText: "Google ile Giriş",
+            buttonText: 'Google ile Giriş',
             buttonOnPressed: () => loginOrRegisterWithGoogle(),
             buttonColor: Colors.purple[400],
           ),
@@ -60,16 +60,16 @@ class _FirstPageState extends State<FirstPage> {
               Icons.mail,
               color: Colors.white,
             ),
-            buttonText: "Email ile Kayıt",
+            buttonText: 'Email ile Kayıt',
             buttonColor: Colors.orange[400],
             buttonOnPressed: () => Navigator.pushNamed(context, RouteConstant.REGISTER_PAGE_ROUTE),
           ),
           TextButton(
               onPressed: () => Navigator.pushNamed(context, RouteConstant.LOGIN_PAGE_ROUTE),
               child: RichText(
-                  text: TextSpan(text: "Zaten Hesabınız Var Mı?", style: Theme.of(context).textTheme.overline, children: <TextSpan>[
+                  text: TextSpan(text: 'Zaten Hesabınız Var Mı?', style: Theme.of(context).textTheme.overline, children: <TextSpan>[
                 TextSpan(
-                    text: " Giriş Yapın",
+                    text: ' Giriş Yapın',
                     style: Theme.of(context).textTheme.overline!.copyWith(
                           color: Theme.of(context).accentColor,
                           fontWeight: FontWeight.bold,

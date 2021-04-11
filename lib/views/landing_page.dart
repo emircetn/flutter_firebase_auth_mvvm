@@ -27,12 +27,13 @@ class _LandingPageState extends State<LandingPage> {
         ),
       );
     } else {
-      if (userModelView.appUser == null)
+      if (userModelView.appUser == null) {
         return FirstPage();
-      else if (userModelView.appUser!.userName != null) {
+      } else if (userModelView.appUser!.userName != null) {
         return HomePage();
-      } else
+      } else {
         return CompleteProfileInformationPage();
+      }
     }
   }
 }

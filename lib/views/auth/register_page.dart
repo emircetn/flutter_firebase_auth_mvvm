@@ -31,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
       backgroundColor: Theme.of(context).canvasColor,
       appBar: AppBar(
         title: Text(
-          "Kayıt Ol",
+          'Kayıt Ol',
           style: Theme.of(context).textTheme.subtitle1,
         ),
         centerTitle: true,
@@ -45,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  formField() => Consumer<UserModelView>(
+  Consumer<UserModelView> formField() => Consumer<UserModelView>(
         builder: (context, userModelView, widget) {
           return Form(
             key: _formKey,
@@ -59,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                        labelText: "Email Adresinizi Girin",
+                        labelText: 'Email Adresinizi Girin',
                         suffixIcon: Icon(
                           Icons.mail,
                           color: Theme.of(context).accentColor,
@@ -78,7 +78,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     obscureText: true,
                     keyboardType: TextInputType.visiblePassword,
                     decoration: InputDecoration(
-                        labelText: "Parolanızı Girin",
+                        labelText: 'Parolanızı Girin',
                         suffixIcon: Icon(
                           Icons.security_rounded,
                           color: Theme.of(context).accentColor,
@@ -93,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 userModelView.stateGet == UserViewState.IDLE
                     ? AuthButton(
                         buttonIcon: Container(),
-                        buttonText: "Kayıt Ol",
+                        buttonText: 'Kayıt Ol',
                         buttonColor: Theme.of(context).accentColor,
                         buttonOnPressed: () async => await registerWithMail(),
                       )
@@ -107,13 +107,13 @@ class _RegisterPageState extends State<RegisterPage> {
   Future registerWithMail() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      String result = await Provider.of<UserModelView>(context, listen: false).registerWithMail(_email!, _password!);
-      if (result == "no-verified") {
-        Fluttertoast.showToast(
+      var result = await Provider.of<UserModelView>(context, listen: false).registerWithMail(_email!, _password!);
+      if (result == 'no-verified') {
+        await Fluttertoast.showToast(
             gravity: ToastGravity.CENTER,
             toastLength: Toast.LENGTH_LONG,
-            msg: "Size hesabınızı doğrulamanız için mail gönderdik, lütfen hesabızı doğruladıktan sonra giriş yapın");
-        Navigator.pushReplacementNamed(context, RouteConstant.LOGIN_PAGE_ROUTE);
+            msg: 'Size hesabınızı doğrulamanız için mail gönderdik, lütfen hesabızı doğruladıktan sonra giriş yapın');
+        await Navigator.pushReplacementNamed(context, RouteConstant.LOGIN_PAGE_ROUTE);
       } else {
         showSnackBar(ErrorConstants.showError(result));
       }
@@ -126,9 +126,9 @@ class _RegisterPageState extends State<RegisterPage> {
         content: Text(
           result,
         ),
-        action: result == "wrong-password"
+        action: result == 'wrong-password'
             ? SnackBarAction(
-                label: "Parolanızı Mı Unuttunuz?",
+                label: 'Parolanızı Mı Unuttunuz?',
                 onPressed: () {
                   //fireabse kodu yaz toast göster
                 },

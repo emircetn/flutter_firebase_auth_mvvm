@@ -9,22 +9,24 @@ import 'package:auth_firebase/utils/get_it.dart';
 class UserRepository {
   //////////////////singleton olarak servisler tanımlandı////////////////////
 
-  FirebaseAuthService? _firebaseAuthService = getIt<FirebaseAuthService>();
-  FirebaseFirestoreService? _firebaseFirestoreService = getIt<FirebaseFirestoreService>();
-  FirebaseStrogeService? _firebaseStrogeService = getIt<FirebaseStrogeService>();
+  final FirebaseAuthService? _firebaseAuthService = getIt<FirebaseAuthService>();
+  final FirebaseFirestoreService? _firebaseFirestoreService = getIt<FirebaseFirestoreService>();
+  final FirebaseStrogeService? _firebaseStrogeService = getIt<FirebaseStrogeService>();
 
   //////////////////////////////auth////////////////////////////////////
 
   Future<AppUser?> currentUser() async {
-    AppUser? appUserFB = _firebaseAuthService!.getCurrentUser();
+    var appUserFB = _firebaseAuthService!.getCurrentUser();
     if (appUserFB != null) {
-      AppUser? appUserDB = await (_firebaseFirestoreService!.readUserFromDatabase(appUserFB.userID));
-      if (appUserDB != null)
+      var appUserDB = await (_firebaseFirestoreService!.readUserFromDatabase(appUserFB.userID));
+      if (appUserDB != null) {
         return appUserDB;
-      else
+      } else {
         return appUserFB;
-    } else
+      }
+    } else {
       return null;
+    }
   }
 
   Future<String> registerWithMail(String email, String password) async {
@@ -33,19 +35,20 @@ class UserRepository {
 
   Future loginWithMail(String email, String password) async {
     var result = await _firebaseAuthService!.loginWithMail(email, password);
-    if (result is String)
+    if (result is String) {
       return result;
-    else {
-      AppUser? user = await (_firebaseFirestoreService!.readUserFromDatabase(result.userID));
-      if (user != null)
+    } else {
+      var user = await (_firebaseFirestoreService!.readUserFromDatabase(result.userID));
+      if (user != null) {
         return user;
-      else
+      } else {
         return result;
+      }
     }
   }
 
   Future<AppUser?> loginOrRegisterWithGoogle() async {
-    AppUser? result = await _firebaseAuthService!.loginOrRegisterWithGoogle();
+    var result = await _firebaseAuthService!.loginOrRegisterWithGoogle();
     if (result != null) {
       result = await (_firebaseFirestoreService!.saveOrReadGoogleUserToDatabase(result));
     }

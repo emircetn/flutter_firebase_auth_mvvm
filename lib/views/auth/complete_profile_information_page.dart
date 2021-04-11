@@ -39,7 +39,7 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profilinizi Oluşturun"),
+        title: Text('Profilinizi Oluşturun'),
         centerTitle: true,
         backgroundColor: Theme.of(context).canvasColor,
         elevation: 0,
@@ -56,7 +56,7 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
     );
   }
 
-  profilePhotoField() => Container(
+  Container profilePhotoField() => Container(
       height: 150.h,
       width: 150.h,
       child: Stack(
@@ -73,7 +73,7 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
                     )
                   : _profilePicture == null
                       ? Image.asset(
-                          AssetContants.instance.imagePath + "profile".toPNG,
+                          AssetContants.instance.imagePath + 'profile'.toPNG,
                           fit: BoxFit.cover,
                         )
                       : Image.file(_profilePicture!, fit: BoxFit.cover),
@@ -89,7 +89,7 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
         ],
       ));
 
-  textFields() => Consumer<UserModelView>(builder: (context, userModelView, widget) {
+  Consumer<UserModelView> textFields() => Consumer<UserModelView>(builder: (context, userModelView, widget) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Form(
@@ -100,11 +100,11 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
                     autofocus: true,
-                    initialValue: _nameAndSurname != null ? _nameAndSurname : "",
+                    initialValue: _nameAndSurname ?? '',
                     textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                        labelText: "Adınızı ve Soyadınızı Girin",
+                        labelText: 'Adınızı ve Soyadınızı Girin',
                         suffixIcon: Icon(
                           Icons.person,
                           color: Theme.of(context).accentColor,
@@ -122,7 +122,7 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
                     textInputAction: TextInputAction.done,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
-                        labelText: "Kullanıcı Adınızı Girin",
+                        labelText: 'Kullanıcı Adınızı Girin',
                         suffixIcon: Icon(
                           Icons.person,
                           color: Theme.of(context).accentColor,
@@ -140,7 +140,7 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
                     Container(),
                     TextButton(
                       onPressed: () async => await submitInformation(),
-                      child: Text("Tamamla"),
+                      child: Text('Tamamla'),
                     )
                   ],
                 )
@@ -156,13 +156,13 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
     await userModelView.userNameCheck(_userName);
     if (_formKey!.currentState!.validate()) {
       AppUser user = await (setInputs(userModelView.appUser!));
-      bool result = await userModelView.saveUserToDatabase(user);
-      if (result == false) showToast("Bir hata oluştu");
+      var result = await userModelView.saveUserToDatabase(user);
+      if (result == false) showToast('Bir hata oluştu');
     }
   }
 
   Future setInputs(AppUser appUser) async {
-    AppUser user = appUser;
+    var user = appUser;
     user.userName = _userName;
     user.nameAndSurName = _nameAndSurname;
     user.profileUrl = await uploadProfilePhoto();
@@ -172,15 +172,16 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
   Future<String?> uploadProfilePhoto() async {
     if (_profilePicture != null) {
       final userModelView = Provider.of<UserModelView>(context, listen: false);
-      String? result = await userModelView.uploadProfilePhotoToDatabase(_profilePicture!);
+      var result = await userModelView.uploadProfilePhotoToDatabase(_profilePicture!);
       if (result == null) {
-        showToast("Profil fotoğrafınız yüklenemedi. Lütfen daha sonra tekrar deneyin");
+        showToast('Profil fotoğrafınız yüklenemedi. Lütfen daha sonra tekrar deneyin');
       }
       return result;
     } else if (_profilPictureUrl != null) {
       return _profilPictureUrl;
-    } else
+    } else {
       return AssetContants.instance.defaultProfileImage;
+    }
   }
 
   void choosePhoto() {
@@ -195,14 +196,14 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
                   leading: Icon(
                     Icons.camera,
                   ),
-                  title: Text("Kameradan Çek"),
+                  title: Text('Kameradan Çek'),
                   onTap: getCamera,
                 ),
                 ListTile(
                   leading: Icon(
                     Icons.image,
                   ),
-                  title: Text("Galeriden Seç"),
+                  title: Text('Galeriden Seç'),
                   onTap: getGallery,
                 ),
                 if (_profilePicture != null || _profilPictureUrl != null) ...[
@@ -210,7 +211,7 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
                     leading: Icon(
                       Icons.delete,
                     ),
-                    title: Text("Profil Fotoğrafını Kaldır"),
+                    title: Text('Profil Fotoğrafını Kaldır'),
                     onTap: removeImage,
                   ),
                 ]
@@ -254,7 +255,7 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
           CropAspectRatioPreset.square,
         ],
         androidUiSettings: AndroidUiSettings(
-            toolbarTitle: "Kırp",
+            toolbarTitle: 'Kırp',
             toolbarColor: Theme.of(context).primaryColor,
             toolbarWidgetColor: Theme.of(context).primaryColor,
             initAspectRatio: CropAspectRatioPreset.square,

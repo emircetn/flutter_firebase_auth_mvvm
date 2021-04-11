@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       create: (_) => UserModelView(),
       child: ScreenUtilInit(builder: () {
         return MaterialApp(
-          title: "Firebase Auth",
+          title: 'Firebase Auth',
           onGenerateRoute: RouterService.generateRoute,
           theme: ThemeConstants.lightTheme,
           debugShowCheckedModeBanner: false,

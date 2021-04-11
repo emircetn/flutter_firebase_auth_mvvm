@@ -4,25 +4,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseFirestoreService extends DatabaseService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  final String userCollection = "users";
+  final String userCollection = 'users';
 
   @override
   Future<AppUser?> readUserFromDatabase(String? userID) async {
-    DocumentSnapshot _documentSnapshot = await _firebaseFirestore.collection(userCollection).doc(userID).get();
-    Map<String, dynamic>? _userMap = _documentSnapshot.data();
-    if (_userMap == null)
+    var _documentSnapshot = await _firebaseFirestore.collection(userCollection).doc(userID).get();
+    var _userMap = _documentSnapshot.data();
+    if (_userMap == null) {
       return null;
-    else
+    } else {
       return AppUser.fromMap(_userMap);
+    }
   }
 
   @override
   Future<AppUser?> saveOrReadGoogleUserToDatabase(AppUser appUser) async {
     AppUser? user;
-    DocumentReference dr = _firebaseFirestore.collection("users").doc(appUser.userID);
-    DocumentSnapshot documentSnapshot = await dr.get();
+    var dr = _firebaseFirestore.collection('users').doc(appUser.userID);
+    var documentSnapshot = await dr.get();
     if (!documentSnapshot.exists) {
-      Map<String, dynamic> userMap = appUser.toMap();
+      var userMap = appUser.toMap();
       await dr.set(userMap);
       user = AppUser.fromMap(userMap);
     } else {
@@ -43,8 +44,8 @@ class FirebaseFirestoreService extends DatabaseService {
 
   @override
   Future<bool> userNameCheckFromDatabase(String? userName) async {
-    QuerySnapshot users = await _firebaseFirestore.collection(userCollection).where("userName", isEqualTo: userName).get();
-    if (users.docs.length > 0) {
+    var users = await _firebaseFirestore.collection(userCollection).where('userName', isEqualTo: userName).get();
+    if (users.docs.isNotEmpty) {
       return false;
     }
     return true;

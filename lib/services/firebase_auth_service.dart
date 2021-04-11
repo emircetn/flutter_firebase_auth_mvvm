@@ -12,33 +12,35 @@ class FirebaseAuthService extends AuthService {
 
   @override
   Future<AppUser?> loginOrRegisterWithGoogle() async {
-    GoogleSignInAccount? _googleSignInAccount = await GoogleSignIn().signIn().catchError((onError) {
-      print("Error $onError");
+    var _googleSignInAccount = await GoogleSignIn().signIn().catchError((onError) {
+      print('Error $onError');
     });
     if (_googleSignInAccount != null) {
-      GoogleSignInAuthentication _googleAuth = await _googleSignInAccount.authentication;
+      var _googleAuth = await _googleSignInAccount.authentication;
       if (_googleAuth.idToken != null && _googleAuth.accessToken != null) {
-        UserCredential userFB = await _firebaseAuth.signInWithCredential(GoogleAuthProvider.credential(
+        var userFB = await _firebaseAuth.signInWithCredential(GoogleAuthProvider.credential(
           idToken: _googleAuth.idToken,
           accessToken: _googleAuth.accessToken,
         ));
-        User _firebaseUser = userFB.user!;
+        var _firebaseUser = userFB.user!;
         return _firebaseGoogleUserToAppUser(_firebaseUser);
-      } else
+      } else {
         return null;
-    } else
+      }
+    } else {
       return null;
+    }
   }
 
   @override
   Future loginWithMail(String email, String password) async {
     try {
-      UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-      if (userCredential.user!.emailVerified)
+      var userCredential = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      if (userCredential.user!.emailVerified) {
         return _firebaseUserToAppUser(userCredential.user!);
-      else {
-        userCredential.user!.sendEmailVerification();
-        return "no-verified";
+      } else {
+        await userCredential.user!.sendEmailVerification();
+        return 'no-verified';
       }
     } on FirebaseAuthException catch (e) {
       return e.code;
@@ -48,9 +50,9 @@ class FirebaseAuthService extends AuthService {
   @override
   Future<String> registerWithMail(String email, String password) async {
     try {
-      UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
-      userCredential.user!.sendEmailVerification();
-      return "no-verified";
+      var userCredential = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
+      await userCredential.user!.sendEmailVerification();
+      return 'no-verified';
     } on FirebaseAuthException catch (e) {
       return e.code;
     }
@@ -60,7 +62,7 @@ class FirebaseAuthService extends AuthService {
   Future signOut() async {
     await _firebaseAuth.signOut();
     final _googleSignIn = GoogleSignIn();
-    _googleSignIn.signOut();
+    await _googleSignIn.signOut();
   }
 
   @override

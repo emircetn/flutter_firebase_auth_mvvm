@@ -23,13 +23,12 @@ class RouterService {
       case RouteConstant.HOME_PAGE_ROUTE:
         return CupertinoPageRoute(builder: (_) => HomePage());
       case RouteConstant.COMPLETE_PROFILE_INFORMATION_PAGE:
-        return CupertinoPageRoute(
-            builder: (_) => CompleteProfileInformationPage());
+        return CupertinoPageRoute(builder: (_) => CompleteProfileInformationPage());
       default:
         return CupertinoPageRoute(
           builder: (_) => Scaffold(
             appBar: AppBar(
-              title: Text("Hata"),
+              title: Text('Hata'),
               centerTitle: true,
             ),
             body: Center(
