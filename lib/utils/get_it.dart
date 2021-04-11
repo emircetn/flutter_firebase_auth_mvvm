@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 
 GetIt getIt = GetIt.asNewInstance();
 
-getItSetup() {
+void getItSetup() async {
   getIt.registerLazySingleton(() => FirebaseAuthService());
   getIt.registerLazySingleton(() => FirebaseFirestoreService());
   getIt.registerLazySingleton(() => FirebaseStrogeService());

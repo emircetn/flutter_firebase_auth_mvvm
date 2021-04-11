@@ -31,7 +31,7 @@ class _FirstPageState extends State<FirstPage> {
             flex: 5,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Image.asset(AssetContants.IMAGE_PATH + "hello.png"),
+              child: Image.asset(AssetContants.instance.imagePath + "hello".toPNG),
             ),
           ),
           Expanded(
@@ -48,7 +48,7 @@ class _FirstPageState extends State<FirstPage> {
         children: [
           AuthButton(
             buttonIcon: Image.asset(
-              AssetContants.ICON_PATH + "google_logo.png",
+              AssetContants.instance.imagePath + "google_logo".toPNG,
               color: Colors.white,
             ),
             buttonText: "Google ile Giriş",

@@ -73,7 +73,7 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
                     )
                   : _profilePicture == null
                       ? Image.asset(
-                          AssetContants.IMAGE_PATH + "profile.png",
+                          AssetContants.instance.imagePath + "profile".toPNG,
                           fit: BoxFit.cover,
                         )
                       : Image.file(_profilePicture!, fit: BoxFit.cover),
@@ -180,7 +180,7 @@ class _CompleteProfileInformationPageState extends State<CompleteProfileInformat
     } else if (_profilPictureUrl != null) {
       return _profilPictureUrl;
     } else
-      return AssetContants.DEFAULT_PROFILE_IMAGE;
+      return AssetContants.instance.defaultProfileImage;
   }
 
   void choosePhoto() {
