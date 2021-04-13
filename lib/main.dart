@@ -1,12 +1,12 @@
-import 'package:auth_firebase/config/router/router_service.dart';
-import 'package:auth_firebase/config/theme/theme_constants.dart';
-import 'package:auth_firebase/modelviews/user_model_view.dart';
-import 'package:auth_firebase/utils/get_it.dart';
-import 'package:auth_firebase/views/landing_page.dart';
+import 'core/router/router_service.dart';
+import 'ui/landing/view/landing_page.dart';
+import 'core/theme/theme_constants.dart';
+import 'get_it.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
+
+import 'core/router/router_route.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,17 +18,17 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserModelView>(
-      create: (_) => UserModelView(),
-      child: ScreenUtilInit(builder: () {
+    return ScreenUtilInit(
+      builder: () {
         return MaterialApp(
-          title: 'Firebase Auth',
-          onGenerateRoute: RouterService.generateRoute,
-          theme: ThemeConstants.lightTheme,
           debugShowCheckedModeBanner: false,
+          title: 'Firebase Auth',
+          onGenerateRoute: NavigationRoute.instance.generateRoute,
+          theme: ThemeConstants.instance.lightTheme,
           home: LandingPage(),
+          navigatorKey: NavigationService.instance.navigatorKey,
         );
-      }),
+      },
     );
   }
 }

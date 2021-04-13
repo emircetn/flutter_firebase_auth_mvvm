@@ -1,0 +1,27 @@
+{
+   "baseView":{
+	"prefix": "baseView",
+	"body": [
+    "import 'package:flutter/material.dart';",
+    "import 'package:auth_firebase/core/extensions/app_extensions.dart';",
+    "import '../modelview/register_model_view.dart';",
+    "import 'package:auth_firebase/core/base/view/base_view.dart';",
+
+    "class $1Page extends StatelessWidget {" ,
+    " @override",
+    " Widget build(BuildContext context) {",
+    "   return BaseView<$1ViewModel>(",
+        "viewModel: $1ViewModel(),",
+        "onModelReady: (model) {",
+        "model.setContext(context);",
+        "model.init();",
+        "},",
+        "onPageBuilder: (BuildContext context, $1ViewModel viewModel) => Scaffold(",
+        "appBar: appBar(),",
+        "body: Container(),",
+        "));",
+        "}",
+        "}"
+	]
+   } 
+}
